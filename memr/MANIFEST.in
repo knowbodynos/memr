@@ -1,0 +1,2 @@
+graft memr/templates
+graft memr/static

@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="jumbotron text-center">
+	<div class="container">
+		<h1>Random Meme Translator</h1>
+		<p>Select a random meme from Imgur and extract its text.</p>
+		<a class="btn btn-primary" href="#" role="button" id="meme_btn"><span class="fas fa-bolt"></span> Random Meme!</a>
+	</div>
+</div>
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col">
+			<img id="meme_div" class="fill-img img-fluid img-thumbnail" src="{{ first_meme_url }}"/>
+		</div>
+		<div class="col">
+			<textarea class="form-control" id="meme_textarea" rows="{{ first_meme_rows }}" readonly>{{ first_meme_text }}</textarea>
+		</div>
+	</div>
+</div>
+
+<script>
+$(document).ready(function(){
+	$("#meme_btn").click(function(){
+		$.ajax({
+			url : "{{url_for('get_meme')}}",
+			success: function(meme_url){
+				$("#meme_div").attr('src', meme_url);
+				$.ajax({
+					type: "GET",
+					url : "{{url_for('read_meme')}}",
+					data: {url: meme_url},
+					success: function(response){
+						$("#meme_textarea").attr('rows', response.meme_rows);
+						$("#meme_textarea").val(response.meme_text);
+					},
+					error: function(error){
+						console.log(error);
+					}
+				});
+			},
+			error: function(error){
+				console.log(error);
+			}
+		});
+	});
+});
+</script>
+
+{% endblock %}
