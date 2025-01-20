@@ -1,2 +1,2 @@
 # memr
-Random meme translator
+Meme text extractor for model training
